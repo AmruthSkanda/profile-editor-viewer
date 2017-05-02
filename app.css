@@ -4,7 +4,7 @@ body{
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", 
   Helvetica, Arial, "Lucida Grande", sans-serif;
 }
-input{
+input,select{
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
@@ -13,6 +13,10 @@ input{
     box-sizing: border-box;
     width: 40%;
 }
+
+/*input:required {
+  box-shadow: 4px 4px 20px rgba(200, 0, 0, 0.85);
+}*/
 
 #mainContainer{
 	display: flex;
@@ -50,13 +54,13 @@ input{
 }
 
 #navBar{
-	flex: 0.2;
+	flex: 0.15;
     background-color: #191919;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     justify-content: center;
-    font-size: 25px;
+    font-size: 20px;
     color: white;
     -webkit-transition: background-color 2s,-webkit-transform 2s;
     transition: background-color 2s, transform 2s;
@@ -68,7 +72,7 @@ input{
 }
 
 #navBar>div{
-	margin: 1em 0em 1em 1em;
+	margin: 1.5em 0em 1.5em 0em;
     cursor: pointer;
     padding: 8px;
     font-weight: bold;
@@ -80,16 +84,24 @@ input{
 }
 
 #formBody{
-	flex:0.8;
+    flex: 0.85;
     display: flex;
     flex-direction: column;
-    margin: 20px;
-    justify-content: center;
-    margin-left: 5em;
+    padding: 20px;
+    padding-left: 5em;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 #formBody>div{
    padding: 1em 0em 1em 0em;
+}
+
+.formTitle{
+	font-weight: bold;
+	font-size: 1.2em;
+	//align-self: center;
+	padding: 0.5em 0em 0.5em 0em !important;
 }
 
 input[type=submit],input[type=reset] {

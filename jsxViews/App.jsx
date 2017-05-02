@@ -17,11 +17,12 @@ class NavBar extends React.Component{
 
 
 	render(){	
+		var pageLabels = [null,"Yourself?","Your address?", "Education?", "Expirienced?"]
 		var highlightClass; 
 		var content = this.props.pages.map((i)=>{
 				highlightClass = (i === this.state.pageIndex) ? "highlighted" : "";
 					return(
-						<div className={highlightClass} id={"page"+i} key={i} onClick={()=>this.updateSelected(i)}>{"Page "+i+" > "}</div>
+						<div className={highlightClass} id={"page"+i} key={i} onClick={()=>this.updateSelected(i)}>{pageLabels[i]}</div>
 					);
 				});	
 		return(
@@ -38,9 +39,7 @@ NavBar.defaultProps = {
 
 class App extends React.Component {
 	constructor(props){
-		super(props);
-		//this.state={pageNo:1};
-		
+		super(props);		
 	}
 
 	clearChildren(element) {
