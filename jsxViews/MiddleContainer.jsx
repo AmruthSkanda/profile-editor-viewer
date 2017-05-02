@@ -21,9 +21,6 @@ export default class MiddleContainer extends React.Component{
 
 	render(){
 		
- 		var educationFields = (<div> <div> <label>Your Address</label><br/> <input type="text" placeholder="Enter Street1 *" required/> <input type="text" style={{"margin-left": "4em"}} placeholder="Enter Street2"/> </div> <div> <label>City <sup>*</sup></label><br/> <input type="text" placeholder="Enter City" required/><br/> </div> <div> <label>State <sup>*</sup></label><br/> <input type="text" placeholder="Enter State" required/><br/> </div> <div> <label>Pincode <sup>*</sup></label><br/> <input type="text" placeholder="Enter Zip" required/><br/> </div> </div> );
-		var expirienceFields =(<div> <div> <label>Company <sup>*</sup></label><br/> <input type="text" placeholder="Enter name of employer"/> </div> <div> <label>No. of years <sup>*</sup></label><br/> <input type="number" max="100" min="0" placeholder="Enter no of years"/><br/> </div> </div> );
-
 		switch (this.state.pageIndex){ 	
 			default:
 			case 1:{
@@ -89,10 +86,21 @@ export default class MiddleContainer extends React.Component{
 				return(
 					<div id="formBody" >
 						<div className="formTitle">Your Education (*mandatory)</div>
-						{educationFields}
-				         <div>		         		
-				         	<div style={{"font-size":"1.5em","font-weight":"bold"}} onClick={()=>this.setState({educationCount:++this.state.educationCount})}>+</div><br/>
-				        </div>
+						<div> 
+							<label>Your Address</label><br/> 
+							<input type="text" placeholder="Enter Street1 *" required/> 
+							<input type="text" style={{"margin-left": "4em"}} placeholder="Enter Street2"/> 
+						</div> 
+						<div> 
+							<label>City <sup>*</sup></label><br/> <input type="text" placeholder="Enter City" required/><br/> 
+						</div> 
+						<div> 
+							<label>State <sup>*</sup></label><br/> <input type="text" placeholder="Enter State" required/><br/> 
+						</div> 
+						<div> 
+							<label>Pincode <sup>*</sup></label><br/> <input type="text" placeholder="Enter Zip" required/><br/> 
+						</div> 
+				        
 				        <div className="submitButtons">
 				        	<input type="submit" value="Previous" onClick={()=>{this.props.changePage(2)}}/>
 					        <input type="reset" value="Clear" onClick={()=>{this.props.clear(document.getElementById("formBody"))}}/>
@@ -106,10 +114,15 @@ export default class MiddleContainer extends React.Component{
 				return(
 					<div id="formBody" >
 						<div className="formTitle">Your Expirience (*mandatory)</div>
-		         		{expirienceFields}
-				        <div>
-				         	<div style={{"font-size":"1.5em","font-weight":"bold"}} onClick={()=>this.setState({expirienceCount:++this.state.expirienceCount})}>+</div><br/>
-				        </div>
+		         		<div> 
+		         			<label>Company <sup>*</sup></label><br/> 
+		         			<input type="text" placeholder="Enter name of employer"/> 
+		         		</div> 
+		         		<div> 
+		         			<label>No. of years <sup>*</sup></label><br/> 
+		         			<input type="number" max="100" min="0" placeholder="Enter no of years"/><br/> 
+		         		</div> 
+				        
 				        
 				        <div className="submitButtons">
 				        	<input type="submit" value="Previous" onClick={()=>{this.props.changePage(3)}}/>
