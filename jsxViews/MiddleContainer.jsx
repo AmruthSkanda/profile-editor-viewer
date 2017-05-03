@@ -9,7 +9,7 @@ const EducationFields = () => {
 				<select required>
 					<option value="">Select an Exam</option>
 					<option value="Exam1">Exam 1</option>
-					<option value="Exam2">SeExam 2</option>
+					<option value="Exam2">Exam 2</option>
 				</select> 
 			</div> 
 			<div> 
@@ -19,9 +19,6 @@ const EducationFields = () => {
 			<div> 
 				<label>Percentage % <sup>*</sup></label><br/> 
 				<input type="number" min="0" max="100" placeholder="Enter %" required/><br/> 
-			</div> 
-			<div> 
-				+
 			</div> 
 		</div> 
 	);
@@ -39,9 +36,7 @@ const ExpirienceFields = () => {
 	 			<label>No. of years <sup>*</sup></label><br/> 
 	 			<input type="number" max="100" min="0" placeholder="Enter no of years"/><br/> 
 	 		</div> 
-	 		<div> 
-				+
-			</div>
+	 		
  		</div> 
 	);
 }
@@ -80,6 +75,14 @@ export default class MiddleContainer extends React.Component{
 		}
 
 		that.props.changePage(nextPage);
+	}
+
+	updateEducationCount(){
+		this.setState({educationCount: ++this.state.educationCount})
+	}
+
+	updateExpirienceCount(){
+		this.setState({expirienceCount: ++this.state.expirienceCount})
 	}
 
 	render(){
@@ -150,6 +153,9 @@ export default class MiddleContainer extends React.Component{
 					<div id="formBody" >
 						<div className="formTitle">Your Education (*mandatory)</div>
 						{educationView}
+						<div className="addIcon" onClick={()=>this.updateEducationCount()}> 
+							+
+						</div>
 				        <SubmitFields backButton={true} prevPageIndex={2} nextPageIndex={4} changePage={this.props.changePage} save={this.onSave} clear={this.props.clear}/>	        
 				        
 		         	</div>
@@ -160,7 +166,10 @@ export default class MiddleContainer extends React.Component{
 				return(
 					<div id="formBody" >
 						<div className="formTitle">Your Expirience (*mandatory)</div>
-		         		{expirienceView}		
+		         		{expirienceView}	
+		         		<div className="addIcon" onClick={()=>this.updateExpirienceCount()}> 
+							+
+						</div>	
 		         		<SubmitFields backButton={true} prevPageIndex={3} nextPageIndex={0} changePage={this.props.changePage} save={this.onSave} clear={this.props.clear}/>	        
 				     
 		         	</div>
