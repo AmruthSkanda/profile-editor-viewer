@@ -1,4 +1,67 @@
 import React from 'react';
+var that;
+
+const EducationFields = () => {
+	return(
+		<div> 
+			<div> 
+				<label>Type of Exam <sup>*</sup></label><br/> 
+				<select required>
+					<option value="">Select an Exam</option>
+					<option value="Exam1">Exam 1</option>
+					<option value="Exam2">SeExam 2</option>
+				</select> 
+			</div> 
+			<div> 
+				<label>Board of education <sup>*</sup></label><br/> 
+				<input type="text" placeholder="Enter education board" required/><br/> 
+			</div> 
+			<div> 
+				<label>Percentage % <sup>*</sup></label><br/> 
+				<input type="number" min="0" max="100" placeholder="Enter %" required/><br/> 
+			</div> 
+			<div> 
+				+
+			</div> 
+		</div> 
+	);
+
+}
+
+const ExpirienceFields = () => {
+	return (
+		<div> 
+			<div> 
+	 			<label>Company <sup>*</sup></label><br/> 
+	 			<input type="text" placeholder="Enter name of employer"/> 
+	 		</div> 
+	 		<div> 
+	 			<label>No. of years <sup>*</sup></label><br/> 
+	 			<input type="number" max="100" min="0" placeholder="Enter no of years"/><br/> 
+	 		</div> 
+	 		<div> 
+				+
+			</div>
+ 		</div> 
+	);
+}
+
+const SubmitFields = (props) =>{
+	if(props.backButton)
+		return (
+			<div className="submitButtons">
+	        	<input type="submit" value="Previous" onClick={()=>{props.changePage(props.prevPageIndex)}}/>
+		        <input type="reset" value="Clear" onClick={()=>{props.clear(document.getElementById("formBody"))}}/>
+		        <input type="submit" value="Save" onClick={()=>{props.save(props.nextPageIndex)}}/>
+	        </div>
+		)
+	return(
+		 <div className="submitButtons">
+	        <input type="reset" value="Clear" onClick={()=>{props.clear(document.getElementById("formBody"))}}/>
+	        <input type="submit" value="Save" onClick={()=>{props.save(props.nextPageIndex)}}/>
+        </div>
+	);
+}
 export default class MiddleContainer extends React.Component{
 	constructor(props){
 		super(props)
@@ -16,11 +79,16 @@ export default class MiddleContainer extends React.Component{
 				}
 		}
 
-		this.props.changePage(nextPage);
+		that.props.changePage(nextPage);
 	}
 
 	render(){
-		
+		that = this;
+		var educationView =[],expirienceView=[];
+		for(var i=1;i<=this.state.educationCount;i++)
+			educationView.push(<EducationFields />)
+		for(var i=0;i<this.state.expirienceCount;i++)
+			expirienceView.push(<ExpirienceFields />)
 		switch (this.state.pageIndex){ 	
 			default:
 			case 1:{
@@ -30,7 +98,7 @@ export default class MiddleContainer extends React.Component{
 		         		<div>
 				         	<label>Your Name</label><br/>
 				         	<input type="text" placeholder="Enter first name *" required/>
-				         	<input type="text" style={{"margin-left": "4em"}} placeholder="Enter second name"/>
+				         	<input type="text" style={{"marginLeft": "4em"}} placeholder="Enter second name"/>
 				        </div> 
 				        <div>
 				        	<label>Father's Name <sup>*</sup></label><br/>
@@ -44,10 +112,8 @@ export default class MiddleContainer extends React.Component{
 				         	<label>DOB</label> <sup>*</sup><br/>
 				         	<input type="date" placeholder="Enter date of birth" required/><br/>
 				        </div>
-				        <div className="submitButtons">
-					        <input type="reset" value="Clear" onClick={()=>{this.props.clear(document.getElementById("formBody"))}}/>
-					        <input type="submit" value="Save" onClick={()=>{this.onSave(2)}}/>
-				        </div>
+				        <SubmitFields backButton={false} nextPageIndex={2} save={this.onSave} clear={this.props.clear}/>	        
+				       
 		         	</div>
 	         	);
 	         	break;
@@ -73,11 +139,8 @@ export default class MiddleContainer extends React.Component{
 				        	<label>Pincode <sup>*</sup></label><br/>	         	
 				         	<input type="text" placeholder="Enter Zip" required/><br/>
 				        </div>
-				        <div className="submitButtons">
-				        	<input type="submit" value="Previous" onClick={()=>{this.props.changePage(1)}}/>
-					        <input type="reset" defaultValue="Clear" onClick={()=>{this.props.clear(document.getElementById("formBody"))}}/>
-					        <input type="submit" value="Save" onClick={()=>{this.onSave(3)}}/>
-				        </div>
+				        <SubmitFields backButton={true} prevPageIndex={1} nextPageIndex={3} changePage={this.props.changePage} save={this.onSave} clear={this.props.clear}/>	        
+				        
 		         	</div>
 	         	);
 	         	break;
@@ -86,26 +149,9 @@ export default class MiddleContainer extends React.Component{
 				return(
 					<div id="formBody" >
 						<div className="formTitle">Your Education (*mandatory)</div>
-						<div> 
-							<label>Your Address</label><br/> 
-							<input type="text" placeholder="Enter Street1 *" required/> 
-							<input type="text" style={{"margin-left": "4em"}} placeholder="Enter Street2"/> 
-						</div> 
-						<div> 
-							<label>City <sup>*</sup></label><br/> <input type="text" placeholder="Enter City" required/><br/> 
-						</div> 
-						<div> 
-							<label>State <sup>*</sup></label><br/> <input type="text" placeholder="Enter State" required/><br/> 
-						</div> 
-						<div> 
-							<label>Pincode <sup>*</sup></label><br/> <input type="text" placeholder="Enter Zip" required/><br/> 
-						</div> 
+						{educationView}
+				        <SubmitFields backButton={true} prevPageIndex={2} nextPageIndex={4} changePage={this.props.changePage} save={this.onSave} clear={this.props.clear}/>	        
 				        
-				        <div className="submitButtons">
-				        	<input type="submit" value="Previous" onClick={()=>{this.props.changePage(2)}}/>
-					        <input type="reset" value="Clear" onClick={()=>{this.props.clear(document.getElementById("formBody"))}}/>
-					        <input type="submit" value="Save" onClick={()=>{this.onSave(4)}}/>
-				        </div>
 		         	</div>
 	         	);
 	         	break;
@@ -114,21 +160,9 @@ export default class MiddleContainer extends React.Component{
 				return(
 					<div id="formBody" >
 						<div className="formTitle">Your Expirience (*mandatory)</div>
-		         		<div> 
-		         			<label>Company <sup>*</sup></label><br/> 
-		         			<input type="text" placeholder="Enter name of employer"/> 
-		         		</div> 
-		         		<div> 
-		         			<label>No. of years <sup>*</sup></label><br/> 
-		         			<input type="number" max="100" min="0" placeholder="Enter no of years"/><br/> 
-		         		</div> 
-				        
-				        
-				        <div className="submitButtons">
-				        	<input type="submit" value="Previous" onClick={()=>{this.props.changePage(3)}}/>
-					        <input type="reset" value="Clear" onClick={()=>{this.props.clear(document.getElementById("formBody"))}}/>
-					        <input type="submit" value="Submit" onClick={()=>this.onSave(0)}/>
-				        </div>
+		         		{expirienceView}		
+		         		<SubmitFields backButton={true} prevPageIndex={3} nextPageIndex={0} changePage={this.props.changePage} save={this.onSave} clear={this.props.clear}/>	        
+				     
 		         	</div>
 	         	);
 	         	break;

@@ -17,7 +17,7 @@ class NavBar extends React.Component{
 
 
 	render(){	
-		var pageLabels = [null,"Yourself?","Your address?", "Education?", "Expirienced?"]
+		var pageLabels = [null,"Yourself?","Your adress?", "Education?", "Expirienced?"]
 		var highlightClass; 
 		var content = this.props.pages.map((i)=>{
 				highlightClass = (i === this.state.pageIndex) ? "highlighted" : "";
@@ -37,7 +37,7 @@ NavBar.defaultProps = {
 	pages:[1,2,3,4],
 }
 
-class App extends React.Component {
+class ProfileEditor extends React.Component {
 	constructor(props){
 		super(props);		
 	}
@@ -76,7 +76,7 @@ class App extends React.Component {
     render() {
     	that=this;
       return (
-         <div id="pageContainer">
+         <div className="pageContainer">
          	<TopContainer />
          	<div id="middleContainer">
 	         	<NavBar ref="navBar" />
@@ -88,4 +88,4 @@ class App extends React.Component {
     }
 }
 
-export default App;
+export default ProfileEditor;

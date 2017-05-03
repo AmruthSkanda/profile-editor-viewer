@@ -4,6 +4,7 @@ body{
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", 
   Helvetica, Arial, "Lucida Grande", sans-serif;
 }
+
 input,select{
     padding: 12px 20px;
     margin: 8px 0;
@@ -14,16 +15,12 @@ input,select{
     width: 40%;
 }
 
-/*input:required {
-  box-shadow: 4px 4px 20px rgba(200, 0, 0, 0.85);
-}*/
-
 #mainContainer{
 	display: flex;
     height: inherit;
 }
 
-#pageContainer{
+.pageContainer{
 	display: flex;
     flex: 1;
     flex-direction: column;
@@ -93,7 +90,7 @@ input,select{
     overflow-x: hidden;
 }
 
-#formBody>div{
+#formBody>div,#formBody>div>div{
    padding: 1em 0em 1em 0em;
 }
 
