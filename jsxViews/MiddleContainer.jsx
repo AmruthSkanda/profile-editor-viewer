@@ -1,40 +1,42 @@
 import React from 'react';
+import store from '../src/utils/store'
+//console.log(store.getUserProfileData())
 var that;
 
-const EducationFields = () => {
+const EducationFields = (props) => {
 	return(
 		<div> 
 			<div> 
-				<label>Type of Exam <sup>*</sup></label><br/> 
-				<select required>
+				<label>Type of Exam</label><br/> 
+				<select id={"EXAM_TYPE"+props.index}>
 					<option value="">Select an Exam</option>
 					<option value="Exam1">Exam 1</option>
 					<option value="Exam2">Exam 2</option>
 				</select> 
 			</div> 
 			<div> 
-				<label>Board of education <sup>*</sup></label><br/> 
-				<input type="text" placeholder="Enter education board" required/><br/> 
+				<label>Board of education </label><br/> 
+				<input id={"EDUCATION_BOARD"+props.index} type="text" name="EXAM_TYPE" placeholder="Enter education board" /><br/> 
 			</div> 
 			<div> 
-				<label>Percentage % <sup>*</sup></label><br/> 
-				<input type="number" min="0" max="100" placeholder="Enter %" required/><br/> 
+				<label>Percentage % </label><br/> 
+				<input id={"PERCENTAGE"+props.index} type="number" min="0" max="100" placeholder="Enter %" /><br/> 
 			</div> 
 		</div> 
 	);
 
 }
 
-const ExpirienceFields = () => {
+const ExpirienceFields = (props) => {
 	return (
 		<div> 
 			<div> 
-	 			<label>Company <sup>*</sup></label><br/> 
-	 			<input type="text" placeholder="Enter name of employer"/> 
+	 			<label>Company </label><br/> 
+	 			<input id={"COMPANY"+props.index} type="text" placeholder="Enter name of employer"/> 
 	 		</div> 
 	 		<div> 
-	 			<label>No. of years <sup>*</sup></label><br/> 
-	 			<input type="number" max="100" min="0" placeholder="Enter no of years"/><br/> 
+	 			<label>No. of years </label><br/> 
+	 			<input id={"NO_OF_YEARS"+props.index} type="number" max="100" min="0" placeholder="Enter no of years"/><br/> 
 	 		</div> 
 	 		
  		</div> 
@@ -43,17 +45,17 @@ const ExpirienceFields = () => {
 
 const SubmitFields = (props) =>{
 	if(props.backButton)
-		return (
+		return (// onClick={()=>{props.save(props.nextPageIndex)}}
 			<div className="submitButtons">
 	        	<input type="submit" value="Previous" onClick={()=>{props.changePage(props.prevPageIndex)}}/>
 		        <input type="reset" value="Clear" onClick={()=>{props.clear(document.getElementById("formBody"))}}/>
-		        <input type="submit" value="Save" onClick={()=>{props.save(props.nextPageIndex)}}/>
+		        <input type="submit" value="Save"/>
 	        </div>
-		)
-	return(
+		);
+	 return(//onClick={()=>{props.save(props.nextPageIndex)}}
 		 <div className="submitButtons">
 	        <input type="reset" value="Clear" onClick={()=>{props.clear(document.getElementById("formBody"))}}/>
-	        <input type="submit" value="Save" onClick={()=>{props.save(props.nextPageIndex)}}/>
+	        <input type="submit" value="Save" />
         </div>
 	);
 }
@@ -62,19 +64,31 @@ export default class MiddleContainer extends React.Component{
 		super(props)
 		this.state={pageIndex:null,educationCount:1,expirienceCount:1}
 	}
-	onSave(nextPage){
-		var inputs = document.getElementById('formBody').getElementsByTagName('input');
+	onSave(currPage,nextPage){
+		/*var inputs = document.getElementById('formBody').getElementsByTagName('input');
 		var selects = document.getElementById('formBody').getElementsByTagName('select')
 		var allValidInputs = [...inputs,...selects];
 		for(var input of allValidInputs){
-			if(input.required)
 				if(!input.value){
-					alert("Please input all mandatory to save")
-					return;
+					
 				}
+		}*/
+		try{
+			var formData = {};
+			var formElem = document.getElementById("formBody");
+			for(var i=0; i<formElem.elements.length;i++){
+				let elemId = formElem.elements[i].id;
+				if(elemId)
+					formData[elemId] = document.getElementById(elemId).value;
+			}
+			store.saveFormData("page"+currPage,formData);
+			console.log(store.getUserProfileData());
+			that.props.changePage(nextPage);
 		}
-
-		that.props.changePage(nextPage);
+		catch(e){
+			console.log(e.message);
+		}
+		return false;
 	}
 
 	updateEducationCount(){
@@ -89,90 +103,90 @@ export default class MiddleContainer extends React.Component{
 		that = this;
 		var educationView =[],expirienceView=[];
 		for(var i=1;i<=this.state.educationCount;i++)
-			educationView.push(<EducationFields />)
-		for(var i=0;i<this.state.expirienceCount;i++)
-			expirienceView.push(<ExpirienceFields />)
+			educationView.push(<EducationFields key={i} index={i}/>)
+		for(var i=1;i<=this.state.expirienceCount;i++)
+			expirienceView.push(<ExpirienceFields key={i} index={i}/>)
 		switch (this.state.pageIndex){ 	
 			default:
 			case 1:{
 				return(
-					<div id="formBody" >
-						<div className="formTitle">Tell me about yourself (*mandatory)</div>
+					<form id="formBody" onSubmit={(event)=>{event.preventDefault(); this.onSave(1,2)}}>
+						<div className="formTitle">Tell me about yourself</div>
 		         		<div>
 				         	<label>Your Name</label><br/>
-				         	<input type="text" placeholder="Enter first name *" required/>
-				         	<input type="text" style={{"marginLeft": "4em"}} placeholder="Enter second name"/>
+				         	<input id="FIRST_NAME" type="text" placeholder="Enter first name" />
+				         	<input id="SECOND_NAME" type="text" style={{"marginLeft": "4em"}} placeholder="Enter second name"/>
 				        </div> 
 				        <div>
-				        	<label>Father's Name <sup>*</sup></label><br/>
-				         	<input type="text" placeholder="Enter father name" required/><br/>
+				        	<label>Father's Name </label><br/>
+				         	<input id="FATHER_NAME" type="text" placeholder="Enter father name" /><br/>
 				        </div>
 				        <div>
-				         	<label>Mother's Name <sup>*</sup></label><br/>
-				         	<input type="text" placeholder="Enter mother name" required/><br/>
+				         	<label>Mother's Name </label><br/>
+				         	<input id="MOTHER_NAME" type="text" placeholder="Enter mother name" /><br/>
 				        </div>
 				        <div>
-				         	<label>DOB</label> <sup>*</sup><br/>
-				         	<input type="date" placeholder="Enter date of birth" required/><br/>
+				         	<label>DOB</label> <br/>
+				         	<input id="DOB" type="date" placeholder="Enter date of birth" /><br/>
 				        </div>
-				        <SubmitFields backButton={false} nextPageIndex={2} save={this.onSave} clear={this.props.clear}/>	        
+				        <SubmitFields backButton={false} clear={this.props.clear}/>	        
 				       
-		         	</div>
+		         	</form>
 	         	);
 	         	break;
 			}
 			case 2:{
 				return(
-					<div id="formBody" >
-						<div className="formTitle">Where do you live? (*mandatory)</div>
+					<form id="formBody" onSubmit={(event)=>{event.preventDefault(); this.onSave(2,3);}}>
+						<div className="formTitle">Where do you live?</div>
 		         		<div>
 				         	<label>Your Address</label><br/>
-				         	<input type="text" placeholder="Enter Street1 *" required/>
-				         	<input type="text" style={{"margin-left": "4em"}} placeholder="Enter Street2"/>
+				         	<input id="STREET1" type="text" placeholder="Enter Street1" />
+				         	<input id="STREET2" type="text" style={{"marginLeft": "4em"}} placeholder="Enter Street2"/>
 				        </div> 				       
 				        <div>			
-				        	<label>City <sup>*</sup></label><br/>	         	
-				         	<input type="text" placeholder="Enter City" required/><br/>
+				        	<label>City </label><br/>	         	
+				         	<input id="CITY" type="text" placeholder="Enter City" /><br/>
 				        </div>
 				        <div>
-				        	<label>State <sup>*</sup></label><br/>				         	
-				         	<input type="text" placeholder="Enter State" required/><br/>
+				        	<label>State </label><br/>				         	
+				         	<input id="STATE" type="text" placeholder="Enter State" /><br/>
 				        </div>
 				        <div>			
-				        	<label>Pincode <sup>*</sup></label><br/>	         	
-				         	<input type="text" placeholder="Enter Zip" required/><br/>
+				        	<label>Pincode </label><br/>	         	
+				         	<input id="PINCODE" type="text" placeholder="Enter Zip" /><br/>
 				        </div>
-				        <SubmitFields backButton={true} prevPageIndex={1} nextPageIndex={3} changePage={this.props.changePage} save={this.onSave} clear={this.props.clear}/>	        
+				        <SubmitFields backButton={true} prevPageIndex={1} changePage={this.props.changePage}  clear={this.props.clear}/>	        
 				        
-		         	</div>
+		         	</form>
 	         	);
 	         	break;
 			}
 			case 3:{
 				return(
-					<div id="formBody" >
-						<div className="formTitle">Your Education (*mandatory)</div>
+					<form id="formBody" onSubmit={(event)=>{event.preventDefault(); this.onSave(3,4);}}>
+						<div className="formTitle">Your Education </div>
 						{educationView}
 						<div className="addIcon" onClick={()=>this.updateEducationCount()}> 
 							+
 						</div>
-				        <SubmitFields backButton={true} prevPageIndex={2} nextPageIndex={4} changePage={this.props.changePage} save={this.onSave} clear={this.props.clear}/>	        
+				        <SubmitFields backButton={true} prevPageIndex={2} changePage={this.props.changePage} clear={this.props.clear}/>	        
 				        
-		         	</div>
+		         	</form>
 	         	);
 	         	break;
 			}
 			case 4:{
 				return(
-					<div id="formBody" >
-						<div className="formTitle">Your Expirience (*mandatory)</div>
+					<form id="formBody" onSubmit={(event)=>{event.preventDefault(); this.onSave(4,0);}}>
+						<div className="formTitle">Your Expirience</div>
 		         		{expirienceView}	
 		         		<div className="addIcon" onClick={()=>this.updateExpirienceCount()}> 
 							+
 						</div>	
 		         		<SubmitFields backButton={true} prevPageIndex={3} nextPageIndex={0} changePage={this.props.changePage} save={this.onSave} clear={this.props.clear}/>	        
 				     
-		         	</div>
+		         	</form>
 	         	);
 	         	break;
 			}

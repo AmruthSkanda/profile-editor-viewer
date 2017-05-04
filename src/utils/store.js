@@ -1,43 +1,42 @@
 import AppDispatcher from './Dispatcher'
 import ActionConstants from './ActionConstants';
-import Events from 'events';
-
+import Events,{EventEmitter} from 'events';
+var emitter = new EventEmitter();
 var userProfileData = {};
 
-class Store extends Events.EventEmitter{
-	constructor(props) {
-        super(props);
-        this.dispatcherIndex = AppDispatcher.register(this.handleAction.bind(this));
-
+class Store{
+	constructor() {
+        //this.dispatcherIndex = AppDispatcher.register(this.handleAction.bind(this));
     }
     handleAction(payload){        
         let action = payload.action;
         switch(action) {
             case ActionConstants.CHANGE_URL:
-                this.emitAppUrlChange(action.url);
+                emitter.emitAppUrlChange(action.url);
             break;
         }
 
         return true; // No errors. Needed by promise in Dispatcher.
     }
     emitAppUrlChange(url){
-    	this.emit("APP_URL_CHANGED",url)
+    	emitter.emit("APP_URL_CHANGED",url)
     }
 
     addAppUrlChangeListener(callback){
-    	this.on("APP_URL_CHANGED",callback)
-    }
-    
-    removeAppUrlChangeListener(callback){
-    	this.removeListener("APP_URL_CHANGED",callback)
+    	emitter.on("APP_URL_CHANGED",callback)
     }
 
-    setUserProfileData(data){
-    	userProfileData = data;
+    removeAppUrlChangeListener(callback){
+    	emitter.removeListener("APP_URL_CHANGED",callback)
+    }
+
+    saveFormData(page,data){
+    	userProfileData[page] = data;
     }
 
     getUserProfileData(){
     	return userProfileData;
     }
 }
+
 export default new Store();
