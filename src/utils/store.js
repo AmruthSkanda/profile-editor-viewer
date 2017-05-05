@@ -2,23 +2,24 @@ import AppDispatcher from './Dispatcher'
 import ActionConstants from './ActionConstants';
 import Events,{EventEmitter} from 'events';
 var emitter = new EventEmitter();
-var userProfileData = {};
+var userProfileData = {page1:{},page2:{},page3:{},page4:{}};
 
 class Store{
 	constructor() {
-        //this.dispatcherIndex = AppDispatcher.register(this.handleAction.bind(this));
+        this.dispatcherIndex = AppDispatcher.register(this.handleAction.bind(this));
     }
     handleAction(payload){        
         let action = payload.action;
+        let param = payload.params;
         switch(action) {
             case ActionConstants.CHANGE_URL:
-                emitter.emitAppUrlChange(action.url);
+                this.emitAppUrlChange(param.href);
             break;
         }
 
         return true; // No errors. Needed by promise in Dispatcher.
     }
-    emitAppUrlChange(url){
+    emitAppUrlChange(url,pageIndex){
     	emitter.emit("APP_URL_CHANGED",url)
     }
 

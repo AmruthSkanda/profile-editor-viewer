@@ -1,5 +1,6 @@
 import React from 'react';
-import store from '../src/utils/store'
+import store from '../src/utils/store';
+import actions from '../src/utils/actions';
 //console.log(store.getUserProfileData())
 var that;
 
@@ -59,20 +60,22 @@ const SubmitFields = (props) =>{
         </div>
 	);
 }
+
+const TitleView = (props) =>{
+	return(
+		<div className="formTitle">
+			<div className="formTitleVal">My Details</div>
+		 	<div className="editButton" onClick={()=>props.onEditClick("/editor",props.index)}> Edit </div>
+		</div>
+	)
+}
 export default class MiddleContainer extends React.Component{
 	constructor(props){
 		super(props)
-		this.state={pageIndex:null,educationCount:1,expirienceCount:1}
+		this.state={pageIndex:this.props.pageIndex,educationCount:1,expirienceCount:1}
 	}
 	onSave(currPage,nextPage){
-		/*var inputs = document.getElementById('formBody').getElementsByTagName('input');
-		var selects = document.getElementById('formBody').getElementsByTagName('select')
-		var allValidInputs = [...inputs,...selects];
-		for(var input of allValidInputs){
-				if(!input.value){
-					
-				}
-		}*/
+
 		try{
 			var formData = {};
 			var formElem = document.getElementById("formBody");
@@ -99,6 +102,13 @@ export default class MiddleContainer extends React.Component{
 		this.setState({expirienceCount: ++this.state.expirienceCount})
 	}
 
+	onEditClick(nextView,i){
+	    actions.changeUrl({
+	      href: nextView +"/"+ i,
+	    })
+	    //this.setState({view:nextView})
+	  }
+
 	render(){
 		that = this;
 		var educationView =[],expirienceView=[];
@@ -109,85 +119,170 @@ export default class MiddleContainer extends React.Component{
 		switch (this.state.pageIndex){ 	
 			default:
 			case 1:{
-				return(
-					<form id="formBody" onSubmit={(event)=>{event.preventDefault(); this.onSave(1,2)}}>
-						<div className="formTitle">Tell me about yourself</div>
-		         		<div>
-				         	<label>Your Name</label><br/>
-				         	<input id="FIRST_NAME" type="text" placeholder="Enter first name" />
-				         	<input id="SECOND_NAME" type="text" style={{"marginLeft": "4em"}} placeholder="Enter second name"/>
-				        </div> 
-				        <div>
-				        	<label>Father's Name </label><br/>
-				         	<input id="FATHER_NAME" type="text" placeholder="Enter father name" /><br/>
-				        </div>
-				        <div>
-				         	<label>Mother's Name </label><br/>
-				         	<input id="MOTHER_NAME" type="text" placeholder="Enter mother name" /><br/>
-				        </div>
-				        <div>
-				         	<label>DOB</label> <br/>
-				         	<input id="DOB" type="date" placeholder="Enter date of birth" /><br/>
-				        </div>
-				        <SubmitFields backButton={false} clear={this.props.clear}/>	        
-				       
-		         	</form>
-	         	);
+				if(this.props.readOnly){
+					var formData = this.props.profileData["page"+this.state.pageIndex];
+						return(
+							<div id="formBody">
+								<TitleView onEditClick={this.onEditClick} index={this.state.pageIndex}/>
+								
+				         		<div className="fieldDiv">
+						         	<div className="fieldTitles">First Name:</div>
+						         	<div className="fieldValues">{formData.FIRST_NAME ? formData.FIRST_NAME : ''}</div>
+						         	<div className="fieldTitles">Second Name:</div>
+						         	<div className="fieldValues">{formData.SECOND_NAME ? formData.SECOND_NAME : ''}</div>
+						        	<div className="fieldTitles">Father's Name:</div>
+						         	<div className="fieldValues">{formData.FATHER_NAME ? formData.FATHER_NAME : ''}</div>
+						         	<div className="fieldTitles">Mother's Name:</div>
+						         	<div className="fieldValues">{formData.MOTHER_NAME ? formData.MOTHER_NAME : ''}</div>					       
+						         	<div className="fieldTitles">DOB:</div>
+						         	<div className="fieldValues">{formData.DOB ? formData.DOB : ''}</div><br/>
+						        </div>			       
+			         		</div>
+						);
+				}
+				else
+					return(
+						<form id="formBody" onSubmit={(event)=>{event.preventDefault(); this.onSave(1,2)}}>
+							<div className="formTitle">Tell me about yourself</div>
+			         		<div>
+					         	<label>Your Name</label><br/>
+					         	<input id="FIRST_NAME" type="text" placeholder="Enter first name" />
+					         	<input id="SECOND_NAME" type="text" style={{"marginLeft": "4em"}} placeholder="Enter second name"/>
+					        </div> 
+					        <div>
+					        	<label>Father's Name </label><br/>
+					         	<input id="FATHER_NAME" type="text" placeholder="Enter father name" /><br/>
+					        </div>
+					        <div>
+					         	<label>Mother's Name </label><br/>
+					         	<input id="MOTHER_NAME" type="text" placeholder="Enter mother name" /><br/>
+					        </div>
+					        <div>
+					         	<label>DOB</label> <br/>
+					         	<input id="DOB" type="date" placeholder="Enter date of birth" /><br/>
+					        </div>
+					        <SubmitFields backButton={false} clear={this.props.clear}/>	        
+					       
+			         	</form>
+		         	);
 	         	break;
 			}
 			case 2:{
-				return(
-					<form id="formBody" onSubmit={(event)=>{event.preventDefault(); this.onSave(2,3);}}>
-						<div className="formTitle">Where do you live?</div>
-		         		<div>
-				         	<label>Your Address</label><br/>
-				         	<input id="STREET1" type="text" placeholder="Enter Street1" />
-				         	<input id="STREET2" type="text" style={{"marginLeft": "4em"}} placeholder="Enter Street2"/>
-				        </div> 				       
-				        <div>			
-				        	<label>City </label><br/>	         	
-				         	<input id="CITY" type="text" placeholder="Enter City" /><br/>
-				        </div>
-				        <div>
-				        	<label>State </label><br/>				         	
-				         	<input id="STATE" type="text" placeholder="Enter State" /><br/>
-				        </div>
-				        <div>			
-				        	<label>Pincode </label><br/>	         	
-				         	<input id="PINCODE" type="text" placeholder="Enter Zip" /><br/>
-				        </div>
-				        <SubmitFields backButton={true} prevPageIndex={1} changePage={this.props.changePage}  clear={this.props.clear}/>	        
-				        
-		         	</form>
-	         	);
+				if(this.props.readOnly){
+					var formData = this.props.profileData["page"+this.state.pageIndex];
+						return(
+							<div id="formBody">
+								<TitleView onEditClick={this.onEditClick} index={this.state.pageIndex}/>
+				         		<div className="fieldDiv">
+						         	<div className="fieldTitles">First Name:</div>
+						         	<div className="fieldValues">{formData.FIRST_NAME ? formData.FIRST_NAME : ''}</div>
+						         	<div className="fieldTitles">Second Name:</div>
+						         	<div className="fieldValues">{formData.SECOND_NAME ? formData.SECOND_NAME : ''}</div>
+						        	<div className="fieldTitles">Father's Name:</div>
+						         	<div className="fieldValues">{formData.FATHER_NAME ? formData.FATHER_NAME : ''}</div><br/>
+						         	<div className="fieldTitles">Mother's Name:</div>
+						         	<div className="fieldValues">{formData.MOTHER_NAME ? formData.MOTHER_NAME : ''}</div><br/>						       
+						         	<div className="fieldTitles">DOB:</div>
+						         	<div className="fieldValues">{formData.DOB ? formData.DOB : ''}</div><br/>
+						        </div>			       
+			         		</div>
+						);
+				}
+				else
+					return(
+						<form id="formBody" onSubmit={(event)=>{event.preventDefault(); this.onSave(2,3);}}>
+							<div className="formTitle">Where do you live?</div>
+			         		<div>
+					         	<label>Your Address</label><br/>
+					         	<input id="STREET1" type="text" placeholder="Enter Street1" />
+					         	<input id="STREET2" type="text" style={{"marginLeft": "4em"}} placeholder="Enter Street2"/>
+					        </div> 				       
+					        <div>			
+					        	<label>City </label><br/>	         	
+					         	<input id="CITY" type="text" placeholder="Enter City" /><br/>
+					        </div>
+					        <div>
+					        	<label>State </label><br/>				         	
+					         	<input id="STATE" type="text" placeholder="Enter State" /><br/>
+					        </div>
+					        <div>			
+					        	<label>Pincode </label><br/>	         	
+					         	<input id="PINCODE" type="text" placeholder="Enter Zip" /><br/>
+					        </div>
+					        <SubmitFields backButton={true} prevPageIndex={1} changePage={this.props.changePage}  clear={this.props.clear}/>	        
+					        
+			         	</form>
+		         	);
 	         	break;
 			}
 			case 3:{
-				return(
-					<form id="formBody" onSubmit={(event)=>{event.preventDefault(); this.onSave(3,4);}}>
-						<div className="formTitle">Your Education </div>
-						{educationView}
-						<div className="addIcon" onClick={()=>this.updateEducationCount()}> 
-							+
-						</div>
-				        <SubmitFields backButton={true} prevPageIndex={2} changePage={this.props.changePage} clear={this.props.clear}/>	        
-				        
-		         	</form>
-	         	);
+				if(this.props.readOnly){
+					var formData = this.props.profileData["page"+this.state.pageIndex];
+						return(
+							<div id="formBody">
+								<TitleView onEditClick={this.onEditClick} index={this.state.pageIndex}/>
+				         		<div className="fieldDiv">
+						         	<div className="fieldTitles">First Name:</div>
+						         	<div className="fieldValues">{formData.FIRST_NAME ? formData.FIRST_NAME : ''}</div>
+						         	<div className="fieldTitles">Second Name:</div>
+						         	<div className="fieldValues">{formData.SECOND_NAME ? formData.SECOND_NAME : ''}</div>
+						        	<div className="fieldTitles">Father's Name:</div>
+						         	<div className="fieldValues">{formData.FATHER_NAME ? formData.FATHER_NAME : ''}</div><br/>
+						         	<div className="fieldTitles">Mother's Name:</div>
+						         	<div className="fieldValues">{formData.MOTHER_NAME ? formData.MOTHER_NAME : ''}</div><br/>						       
+						         	<div className="fieldTitles">DOB:</div>
+						         	<div className="fieldValues">{formData.DOB ? formData.DOB : ''}</div><br/>
+						        </div>			       
+			         		</div>
+						);
+				}
+				else
+					return(
+						<form id="formBody" onSubmit={(event)=>{event.preventDefault(); this.onSave(3,4);}}>
+							<div className="formTitle">Your Education </div>
+							{educationView}
+							<div className="addIcon" onClick={()=>this.updateEducationCount()}> 
+								+
+							</div>
+					        <SubmitFields backButton={true} prevPageIndex={2} changePage={this.props.changePage} clear={this.props.clear}/>	        
+					        
+			         	</form>
+		         	);
 	         	break;
 			}
 			case 4:{
-				return(
-					<form id="formBody" onSubmit={(event)=>{event.preventDefault(); this.onSave(4,0);}}>
-						<div className="formTitle">Your Expirience</div>
-		         		{expirienceView}	
-		         		<div className="addIcon" onClick={()=>this.updateExpirienceCount()}> 
-							+
-						</div>	
-		         		<SubmitFields backButton={true} prevPageIndex={3} nextPageIndex={0} changePage={this.props.changePage} save={this.onSave} clear={this.props.clear}/>	        
-				     
-		         	</form>
-	         	);
+				if(this.props.readOnly){
+					var formData = this.props.profileData["page"+this.state.pageIndex];
+						return(
+							<div id="formBody">
+								<TitleView onEditClick={this.onEditClick} index={this.state.pageIndex}/>
+				         		<div className="fieldDiv">
+						         	<div className="fieldTitles">First Name:</div>
+						         	<div className="fieldValues">{formData.FIRST_NAME ? formData.FIRST_NAME : ''}</div>
+						         	<div className="fieldTitles">Second Name:</div>
+						         	<div className="fieldValues">{formData.SECOND_NAME ? formData.SECOND_NAME : ''}</div>
+						        	<div className="fieldTitles">Father's Name:</div>
+						         	<div className="fieldValues">{formData.FATHER_NAME ? formData.FATHER_NAME : ''}</div><br/>
+						         	<div className="fieldTitles">Mother's Name:</div>
+						         	<div className="fieldValues">{formData.MOTHER_NAME ? formData.MOTHER_NAME : ''}</div><br/>						       
+						         	<div className="fieldTitles">DOB:</div>
+						         	<div className="fieldValues">{formData.DOB ? formData.DOB : ''}</div><br/>
+						        </div>			       
+			         		</div>
+						);
+				}
+				else
+					return(
+						<form id="formBody" onSubmit={(event)=>{event.preventDefault(); this.onSave(4,0);}}>
+							<div className="formTitle">Your Expirience</div>
+			         		{expirienceView}	
+			         		<div className="addIcon" onClick={()=>this.updateExpirienceCount()}> 
+								+
+							</div>	
+			         		<SubmitFields backButton={true} prevPageIndex={3} nextPageIndex={0} changePage={this.props.changePage} clear={this.props.clear}/>	        
+					     
+			         	</form>
+		         	);
 	         	break;
 			}
 		}

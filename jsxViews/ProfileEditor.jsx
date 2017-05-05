@@ -2,44 +2,18 @@ import React from 'react';
 import TopContainer from './TopContainer.jsx'
 import BottomContainer from './BottomContainer.jsx'
 import MiddleContainer from './MiddleContainer.jsx'
-var that;
+import NavBar from './NavBar.jsx'
 
-class NavBar extends React.Component{
-	constructor(props){
-		super(props);
-		this.state = {pageIndex:1}
-	}	
-
-	updateSelected(i){
-		that.refs.middleContainer.setState({pageIndex:i});
-		this.setState({pageIndex:i});
-	}
-
-
-	render(){	
-		var pageLabels = [null,"Yourself?","Your adress?", "Education?", "Expirienced?"]
-		var highlightClass; 
-		var content = this.props.pages.map((i)=>{
-				highlightClass = (i === this.state.pageIndex) ? "highlighted" : "";
-					return(
-						<div className={highlightClass} id={"page"+i} key={i} onClick={()=>this.updateSelected(i)}>{pageLabels[i]}</div>
-					);
-				});	
-		return(
-			<div id="navBar"> 
-				{content}
-         	</div>
-        );
-    }
-}
-
-NavBar.defaultProps = {
-	pages:[1,2,3,4],
-}
-
-class ProfileEditor extends React.Component {
+export default class ProfileEditor extends React.Component {
 	constructor(props){
 		super(props);		
+	}
+
+	componentDidMount(){
+		if(this.props.pageIndex){
+			this.changePage(Number(this.props.pageIndex))
+			this.refs.topContainer.setState({view:"/editor/"})
+		}
 	}
 
 	clearChildren(element) {
@@ -59,28 +33,28 @@ class ProfileEditor extends React.Component {
 	            break;
 	         case 'select': e.selectedIndex = 0; break;
 	         case 'textarea': e.innerHTML = ''; break;
-	         default: that.clearChildren(e);
+	         default: this.clearChildren(e);
 	      }
 	   }
 	}
 
 	changePage(nextPage){
 		if(nextPage){
-			that.refs.middleContainer.setState({pageIndex:nextPage});
-			that.refs.navBar.setState({pageIndex:nextPage});
+			this.refs.middleContainer.setState({pageIndex:nextPage});
+			this.refs.navBar.setState({pageIndex:nextPage});
 		}
 		else
-			alert("done")
+			alert("Done")
 	}
 
+
     render() {
-    	that=this;
       return (
          <div className="pageContainer">
-         	<TopContainer />
+         	<TopContainer ref="topContainer" currentView="/editor/"/>
          	<div id="middleContainer">
-	         	<NavBar ref="navBar" />
-	         	<MiddleContainer ref="middleContainer" changePage={that.changePage} clear={that.clearChildren}/>
+	         	<NavBar ref="navBar" pageIndex={1} changePage={this.changePage.bind(this)}/>
+	         	<MiddleContainer ref="middleContainer" pageIndex={1} changePage={this.changePage.bind(this)} clear={this.clearChildren}/>
 	        </div>
          	<BottomContainer />
          </div>
@@ -88,4 +62,6 @@ class ProfileEditor extends React.Component {
     }
 }
 
-export default ProfileEditor;
+ProfileEditor.defaultProps = {
+	pageIndex:1
+}

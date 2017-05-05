@@ -1,3 +1,3 @@
-export const ActionTypes = {
+export default {
   CHANGE_URL: "changeUrl",
 };

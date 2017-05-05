@@ -1,11 +1,12 @@
 import ActionConstants from './ActionConstants';
 import Dispatcher from './Dispatcher';
 
-export default const Actions = {
-  changeUrl(url) {
+class Actions {
+  changeUrl(params) {
     Dispatcher.dispatch({
       action: ActionConstants.CHANGE_URL,
-      url: url,
+      params: params
     });
-  },
-};
+  }
+}
+export default new Actions();

@@ -27,14 +27,35 @@ input,select{
 }
 
 #topContainer{
-	flex:0.1;
-    background: #191919;
-    color: white;
-    font-size:1.5em;
-    font-weight: bold;
+    display: flex;
+    flex: 0.1;
+}
+
+.profileViewerButton{
+    display: flex;
+    flex: 0.14;
     align-items: center;
     justify-content: center;
+    font-weight: bold;
+    background-color: white;
+    color: black;
+    cursor: pointer;
+}
+
+.title{
     display: flex;
+    flex: 0.86;
+    align-items: center;
+    justify-content: center;
+    background: #191919;
+    color: white;
+    font-weight: bold;
+    font-size:1.5em;
+}
+
+.profileViewerButton:hover{
+    background: #2f2f2f;
+    color: white;
 }
 
 #bottomContainer{
@@ -99,6 +120,29 @@ input,select{
 
 #formBody>div,#formBody>div>div{
    padding: 1em 0em 1em 0em;
+}
+
+.fieldDiv{
+    
+}
+
+.fieldTitles{
+    
+}
+
+.fieldValues{
+    
+}
+
+.formTitleVal{
+    display: inline-block;
+}
+
+.editButton{
+    display: inline-block;
+    float: right;
+    margin-right: 5em;
+    cursor: pointer;
 }
 
 .formTitle{

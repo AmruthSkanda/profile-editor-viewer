@@ -6,7 +6,7 @@ import ProfileViewer from './ProfileViewer.jsx'
 export default class AppContainer extends React.Component{
 	constructor(){
 		super();
-        this.state = {appUrl:"/editor"}
+        this.state = {appUrl:"/editor/"}
 	}
 
 	componentDidMount(){
@@ -23,8 +23,12 @@ export default class AppContainer extends React.Component{
         var match = null;
         if (url) {
         	if (match = url.match(/editor/ig)) {
+        		
+        		var lastIndex = url.lastIndexOf("/")
+        		var qparam = url.substring(lastIndex+1,url.length);
+        		console.log(qparam)
                 return (
-                    <ProfileEditor />
+                    <ProfileEditor pageIndex={qparam}/>
                 );
             }
             else if(match = url.match(/profile/ig)) {
