@@ -2,6 +2,7 @@ import AppDispatcher from './Dispatcher'
 import ActionConstants from './ActionConstants';
 import Events,{EventEmitter} from 'events';
 var emitter = new EventEmitter();
+var eduCount =1 ,expCount =1;
 var userProfileData = {page1:{},page2:{},page3:{},page4:{}};
 
 class Store{
@@ -37,6 +38,22 @@ class Store{
 
     getUserProfileData(){
     	return userProfileData;
+    }
+
+    getEducationCount(){
+        return eduCount;
+    }
+
+    setEducationCount(val){
+        eduCount = val;
+    }
+
+    getExpirienceCount(){
+        return expCount;
+    }
+
+    setExpirienceCount(val){
+        expCount=val;
     }
 }
 

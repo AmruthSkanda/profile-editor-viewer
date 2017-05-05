@@ -69,10 +69,44 @@ const TitleView = (props) =>{
 		</div>
 	)
 }
+
+const EducationReadOnly = (props) => {
+		return(
+			<div> 
+				<div> 
+					<div className="fieldTitles">Type of Exam:</div>
+		         	<div className="fieldValues">{props.formData.EXAM_TYPE1 ? props.formData.EXAM_TYPE1 : ''}</div>
+				</div> 
+				<div> 
+					<div className="fieldTitles">Board of education:</div>
+		         	<div className="fieldValues">{props.formData.EDUCATION_BOARD1 ? props.formData.EDUCATION_BOARD1 : ''}</div>
+				</div> 
+				<div> 
+					<div className="fieldTitles">Percentage:</div>
+		         	<div className="fieldValues">{props.formData.PERCENTAGE1 ? props.formData.PERCENTAGE1 : ''}</div>
+					
+				</div> 
+			</div> 
+		);
+}
+const ExpirienceReadOnly = (props) => {
+	return(
+		<div> 
+			<div> 
+				<div className="fieldTitles">Company:</div>
+	         	<div className="fieldValues">{props.formData.COMPANY1 ? props.formData.COMPANY1 : ''}</div>
+			</div> 
+			<div> 
+				<div className="fieldTitles">Expirience:</div>
+	         	<div className="fieldValues">{props.formData.NO_OF_YEARS1 ? props.formData.NO_OF_YEARS1 : ''}</div>
+			</div> 
+		</div> 
+	);
+}
 export default class MiddleContainer extends React.Component{
 	constructor(props){
 		super(props)
-		this.state={pageIndex:this.props.pageIndex,educationCount:1,expirienceCount:1}
+		this.state={pageIndex:this.props.pageIndex,educationCount:store.getEducationCount(),expirienceCount:store.getExpirienceCount()}
 	}
 	onSave(currPage,nextPage){
 
@@ -85,7 +119,7 @@ export default class MiddleContainer extends React.Component{
 					formData[elemId] = document.getElementById(elemId).value;
 			}
 			store.saveFormData("page"+currPage,formData);
-			console.log(store.getUserProfileData());
+			//console.log(store.getUserProfileData());
 			that.props.changePage(nextPage);
 		}
 		catch(e){
@@ -95,11 +129,13 @@ export default class MiddleContainer extends React.Component{
 	}
 
 	updateEducationCount(){
-		this.setState({educationCount: ++this.state.educationCount})
+		store.setEducationCount(++this.state.educationCount)
+		this.setState({educationCount: store.getEducationCount()})
 	}
 
 	updateExpirienceCount(){
-		this.setState({expirienceCount: ++this.state.expirienceCount})
+		store.setExpirienceCount(++this.state.expirienceCount)
+		this.setState({expirienceCount: store.getExpirienceCount()})
 	}
 
 	onEditClick(nextView,i){
@@ -111,11 +147,19 @@ export default class MiddleContainer extends React.Component{
 
 	render(){
 		that = this;
+		var formDataAll = this.props.profileData ? this.props.profileData : store.getUserProfileData();
 		var educationView =[],expirienceView=[];
 		for(var i=1;i<=this.state.educationCount;i++)
 			educationView.push(<EducationFields key={i} index={i}/>)
 		for(var i=1;i<=this.state.expirienceCount;i++)
 			expirienceView.push(<ExpirienceFields key={i} index={i}/>)
+		var expirienceReadOnlyView = [],eduReadOnlyView=[];
+		for(var i=1;i<=this.state.expirienceCount;i++){
+			expirienceReadOnlyView.push(<ExpirienceReadOnly formData={formDataAll}/>)
+		}
+		for(var i=1;i<=this.state.expirienceCount;i++){
+			eduReadOnlyView.push(<EducationReadOnly formData={formDataAll}/>)
+		}
 		switch (this.state.pageIndex){ 	
 			default:
 			case 1:{
@@ -174,16 +218,16 @@ export default class MiddleContainer extends React.Component{
 							<div id="formBody">
 								<TitleView onEditClick={this.onEditClick} index={this.state.pageIndex}/>
 				         		<div className="fieldDiv">
-						         	<div className="fieldTitles">First Name:</div>
-						         	<div className="fieldValues">{formData.FIRST_NAME ? formData.FIRST_NAME : ''}</div>
-						         	<div className="fieldTitles">Second Name:</div>
-						         	<div className="fieldValues">{formData.SECOND_NAME ? formData.SECOND_NAME : ''}</div>
-						        	<div className="fieldTitles">Father's Name:</div>
-						         	<div className="fieldValues">{formData.FATHER_NAME ? formData.FATHER_NAME : ''}</div><br/>
-						         	<div className="fieldTitles">Mother's Name:</div>
-						         	<div className="fieldValues">{formData.MOTHER_NAME ? formData.MOTHER_NAME : ''}</div><br/>						       
-						         	<div className="fieldTitles">DOB:</div>
-						         	<div className="fieldValues">{formData.DOB ? formData.DOB : ''}</div><br/>
+						         	<div className="fieldTitles">Street1:</div>
+						         	<div className="fieldValues">{formData.STREET1 ? formData.STREET1 : ''}</div>
+						         	<div className="fieldTitles">Street2:</div>
+						         	<div className="fieldValues">{formData.STREET2 ? formData.STREET2 : ''}</div>
+						        	<div className="fieldTitles">City:</div>
+						         	<div className="fieldValues">{formData.CITY ? formData.CITY : ''}</div><br/>
+						         	<div className="fieldTitles">State:</div>
+						         	<div className="fieldValues">{formData.STATE ? formData.STATE : ''}</div><br/>						       
+						         	<div className="fieldTitles">Pincode:</div>
+						         	<div className="fieldValues">{formData.PINCODE ? formData.PINCODE : ''}</div><br/>
 						        </div>			       
 			         		</div>
 						);
@@ -221,18 +265,7 @@ export default class MiddleContainer extends React.Component{
 						return(
 							<div id="formBody">
 								<TitleView onEditClick={this.onEditClick} index={this.state.pageIndex}/>
-				         		<div className="fieldDiv">
-						         	<div className="fieldTitles">First Name:</div>
-						         	<div className="fieldValues">{formData.FIRST_NAME ? formData.FIRST_NAME : ''}</div>
-						         	<div className="fieldTitles">Second Name:</div>
-						         	<div className="fieldValues">{formData.SECOND_NAME ? formData.SECOND_NAME : ''}</div>
-						        	<div className="fieldTitles">Father's Name:</div>
-						         	<div className="fieldValues">{formData.FATHER_NAME ? formData.FATHER_NAME : ''}</div><br/>
-						         	<div className="fieldTitles">Mother's Name:</div>
-						         	<div className="fieldValues">{formData.MOTHER_NAME ? formData.MOTHER_NAME : ''}</div><br/>						       
-						         	<div className="fieldTitles">DOB:</div>
-						         	<div className="fieldValues">{formData.DOB ? formData.DOB : ''}</div><br/>
-						        </div>			       
+								{eduReadOnlyView}
 			         		</div>
 						);
 				}
@@ -256,18 +289,7 @@ export default class MiddleContainer extends React.Component{
 						return(
 							<div id="formBody">
 								<TitleView onEditClick={this.onEditClick} index={this.state.pageIndex}/>
-				         		<div className="fieldDiv">
-						         	<div className="fieldTitles">First Name:</div>
-						         	<div className="fieldValues">{formData.FIRST_NAME ? formData.FIRST_NAME : ''}</div>
-						         	<div className="fieldTitles">Second Name:</div>
-						         	<div className="fieldValues">{formData.SECOND_NAME ? formData.SECOND_NAME : ''}</div>
-						        	<div className="fieldTitles">Father's Name:</div>
-						         	<div className="fieldValues">{formData.FATHER_NAME ? formData.FATHER_NAME : ''}</div><br/>
-						         	<div className="fieldTitles">Mother's Name:</div>
-						         	<div className="fieldValues">{formData.MOTHER_NAME ? formData.MOTHER_NAME : ''}</div><br/>						       
-						         	<div className="fieldTitles">DOB:</div>
-						         	<div className="fieldValues">{formData.DOB ? formData.DOB : ''}</div><br/>
-						        </div>			       
+				         		{expirienceReadOnlyView}
 			         		</div>
 						);
 				}
