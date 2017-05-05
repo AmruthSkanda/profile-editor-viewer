@@ -122,16 +122,30 @@ input,select{
    padding: 1em 0em 1em 0em;
 }
 
+.dummyTitle{
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    border-bottom-style: solid;
+}
+
 .fieldDiv{
-    
+    display: table;
+}
+
+.fieldContainer{
+    display: table-row;
+    padding: 1em 0em 1em 0em;
 }
 
 .fieldTitles{
-    
+    display: table-cell;
+    font-weight: bold;
+    padding: 2em 0em 2em;
 }
 
 .fieldValues{
-    
+    display: table-cell;
 }
 
 .formTitleVal{

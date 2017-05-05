@@ -71,34 +71,34 @@ const TitleView = (props) =>{
 }
 
 const EducationReadOnly = (props) => {
+		let val = ' ';
+		for(var prop in props.formData){
+			val += props.formData[prop];
+			val += " :: ";
+		}
 		return(
 			<div> 
-				<div> 
-					<div className="fieldTitles">Type of Exam:</div>
-		         	<div className="fieldValues">{props.formData.EXAM_TYPE1 ? props.formData.EXAM_TYPE1 : ''}</div>
+				<div className="fieldContainer"> 
+					<div className="fieldTitles">Education Details:&nbsp;&nbsp;&nbsp;</div>
+		         	<div className="fieldValues">{ val.slice(0,-4) }</div>
 				</div> 
-				<div> 
-					<div className="fieldTitles">Board of education:</div>
-		         	<div className="fieldValues">{props.formData.EDUCATION_BOARD1 ? props.formData.EDUCATION_BOARD1 : ''}</div>
-				</div> 
-				<div> 
-					<div className="fieldTitles">Percentage:</div>
-		         	<div className="fieldValues">{props.formData.PERCENTAGE1 ? props.formData.PERCENTAGE1 : ''}</div>
-					
-				</div> 
+				
 			</div> 
 		);
 }
 const ExpirienceReadOnly = (props) => {
+	let val = ' ';
+	for(var prop in props.formData){
+		val += props.formData[prop];
+		val += " :: ";
+	}
 	return(
 		<div> 
-			<div> 
-				<div className="fieldTitles">Company:</div>
-	         	<div className="fieldValues">{props.formData.COMPANY1 ? props.formData.COMPANY1 : ''}</div>
-			</div> 
-			<div> 
-				<div className="fieldTitles">Expirience:</div>
-	         	<div className="fieldValues">{props.formData.NO_OF_YEARS1 ? props.formData.NO_OF_YEARS1 : ''}</div>
+			<div className="fieldContainer"> 
+				<div className="fieldTitles">Company:&nbsp;&nbsp;&nbsp;</div>
+	         	<div className="fieldValues">
+	         		{ val.slice(0,-4) }
+	         	</div>
 			</div> 
 		</div> 
 	);
@@ -155,10 +155,30 @@ export default class MiddleContainer extends React.Component{
 			expirienceView.push(<ExpirienceFields key={i} index={i}/>)
 		var expirienceReadOnlyView = [],eduReadOnlyView=[];
 		for(var i=1;i<=this.state.expirienceCount;i++){
-			expirienceReadOnlyView.push(<ExpirienceReadOnly formData={formDataAll}/>)
+			let formData = {};
+			for(let prop in formDataAll["page4"]){
+				if(prop.toString().indexOf(i) != -1)
+					formData[prop] = formDataAll["page4"][prop];
+			}
+			expirienceReadOnlyView.push(
+				<div>
+					<div className="dummyTitle">{"Company "+ i + " details:   (Company :: Expirience)"}</div>
+					<ExpirienceReadOnly key={i} formData={formData}/>
+				</div>
+			);
 		}
-		for(var i=1;i<=this.state.expirienceCount;i++){
-			eduReadOnlyView.push(<EducationReadOnly formData={formDataAll}/>)
+		for(var i=1;i<=this.state.educationCount;i++){
+			let formData = {};
+			for(let prop in formDataAll["page3"]){
+				if(prop.toString().indexOf(i) != -1)
+					formData[prop] = formDataAll["page3"][prop];
+			}
+			eduReadOnlyView.push(
+				<div>
+					<div className="dummyTitle">{"Education "+ i + " details:   (Exam :: Education Board :: Percentage in %)"}</div>
+					<EducationReadOnly key={i} formData={formData}/>
+				</div>
+			);
 		}
 		switch (this.state.pageIndex){ 	
 			default:
@@ -170,16 +190,26 @@ export default class MiddleContainer extends React.Component{
 								<TitleView onEditClick={this.onEditClick} index={this.state.pageIndex}/>
 								
 				         		<div className="fieldDiv">
-						         	<div className="fieldTitles">First Name:</div>
-						         	<div className="fieldValues">{formData.FIRST_NAME ? formData.FIRST_NAME : ''}</div>
-						         	<div className="fieldTitles">Second Name:</div>
-						         	<div className="fieldValues">{formData.SECOND_NAME ? formData.SECOND_NAME : ''}</div>
-						        	<div className="fieldTitles">Father's Name:</div>
-						         	<div className="fieldValues">{formData.FATHER_NAME ? formData.FATHER_NAME : ''}</div>
-						         	<div className="fieldTitles">Mother's Name:</div>
-						         	<div className="fieldValues">{formData.MOTHER_NAME ? formData.MOTHER_NAME : ''}</div>					       
-						         	<div className="fieldTitles">DOB:</div>
-						         	<div className="fieldValues">{formData.DOB ? formData.DOB : ''}</div><br/>
+				         			<div className="fieldContainer">
+							         	<div className="fieldTitles">First Name:&nbsp;&nbsp;&nbsp;</div>
+							         	<div className="fieldValues">{formData.FIRST_NAME ? formData.FIRST_NAME : ''}</div>
+						         	</div>
+						         	<div className="fieldContainer">
+							         	<div className="fieldTitles">Second Name:&nbsp;&nbsp;&nbsp;</div>
+							         	<div className="fieldValues">{formData.SECOND_NAME ? formData.SECOND_NAME : ''}</div>
+						         	</div>
+						         	<div className="fieldContainer">
+							        	<div className="fieldTitles">Father's Name:&nbsp;&nbsp;&nbsp;</div>
+							         	<div className="fieldValues">{formData.FATHER_NAME ? formData.FATHER_NAME : ''}</div>
+						         	</div>
+						         	<div className="fieldContainer">
+							         	<div className="fieldTitles">Mother's Name:&nbsp;&nbsp;&nbsp;</div>
+							         	<div className="fieldValues">{formData.MOTHER_NAME ? formData.MOTHER_NAME : ''}</div>					       
+						         	</div>
+						         	<div className="fieldContainer">
+							         	<div className="fieldTitles">DOB:&nbsp;&nbsp;&nbsp;</div>
+							         	<div className="fieldValues">{formData.DOB ? formData.DOB : ''}</div><br/>
+						         	</div>
 						        </div>			       
 			         		</div>
 						);
@@ -218,16 +248,26 @@ export default class MiddleContainer extends React.Component{
 							<div id="formBody">
 								<TitleView onEditClick={this.onEditClick} index={this.state.pageIndex}/>
 				         		<div className="fieldDiv">
-						         	<div className="fieldTitles">Street1:</div>
-						         	<div className="fieldValues">{formData.STREET1 ? formData.STREET1 : ''}</div>
-						         	<div className="fieldTitles">Street2:</div>
-						         	<div className="fieldValues">{formData.STREET2 ? formData.STREET2 : ''}</div>
-						        	<div className="fieldTitles">City:</div>
-						         	<div className="fieldValues">{formData.CITY ? formData.CITY : ''}</div><br/>
-						         	<div className="fieldTitles">State:</div>
-						         	<div className="fieldValues">{formData.STATE ? formData.STATE : ''}</div><br/>						       
-						         	<div className="fieldTitles">Pincode:</div>
-						         	<div className="fieldValues">{formData.PINCODE ? formData.PINCODE : ''}</div><br/>
+				         			<div className="fieldContainer">
+						         		<div className="fieldTitles">Street1:&nbsp;&nbsp;&nbsp;</div>
+						         		<div className="fieldValues">{formData.STREET1 ? formData.STREET1 : ''}</div>
+						         	</div>
+						         	<div className="fieldContainer">
+						         		<div className="fieldTitles">Street2:&nbsp;&nbsp;&nbsp;</div>
+						         		<div className="fieldValues">{formData.STREET2 ? formData.STREET2 : ''}</div>
+						        	</div>
+						        	<div className="fieldContainer">
+						        		<div className="fieldTitles">City:&nbsp;&nbsp;&nbsp;</div>
+						         		<div className="fieldValues">{formData.CITY ? formData.CITY : ''}</div><br/>
+						         	</div>
+						         	<div className="fieldContainer">
+						         		<div className="fieldTitles">State:&nbsp;&nbsp;&nbsp;</div>
+						         		<div className="fieldValues">{formData.STATE ? formData.STATE : ''}</div><br/>						       
+						         	</div>
+						         	<div className="fieldContainer">
+						         		<div className="fieldTitles">Pincode:&nbsp;&nbsp;&nbsp;</div>
+						         		<div className="fieldValues">{formData.PINCODE ? formData.PINCODE : ''}</div><br/>
+						        	</div>
 						        </div>			       
 			         		</div>
 						);

@@ -6,7 +6,7 @@ export default class NavBar extends React.Component{
 	}	
 
 	render(){	
-		var pageLabels = [null,"Yourself?","Your adress?", "Education?", "Expirienced?"]
+		var pageLabels = [null,"Yourself","Your adress", "Education", "Expirienced"]
 		var highlightClass; 
 		var content = this.props.pages.map((i)=>{
 				highlightClass = (i === this.state.pageIndex) ? "highlighted" : "";
