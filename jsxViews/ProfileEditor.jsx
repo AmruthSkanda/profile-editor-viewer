@@ -3,6 +3,7 @@ import TopContainer from './TopContainer.jsx'
 import BottomContainer from './BottomContainer.jsx'
 import MiddleContainer from './MiddleContainer.jsx'
 import NavBar from './NavBar.jsx'
+import actions from '../src/utils/actions'
 
 export default class ProfileEditor extends React.Component {
 	constructor(props){
@@ -43,8 +44,13 @@ export default class ProfileEditor extends React.Component {
 			this.refs.middleContainer.setState({pageIndex:nextPage});
 			this.refs.navBar.setState({pageIndex:nextPage});
 		}
-		else
-			alert("Done")
+		else{
+			if(confirm("Do you want to view your profile?")){
+				actions.changeUrl({
+					href: "/profile/"
+				});
+			}
+		}
 	}
 
 

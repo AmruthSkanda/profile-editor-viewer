@@ -18,12 +18,12 @@ class TopContainer extends React.Component {
       let nextView,buttonText,titleTxt;
       if(this.state.view === "/editor/"){
         nextView = "/profile/";
-        buttonText = "Profile Viewer";
+        buttonText = "Goto Profile Viewer";
         titleTxt = "Profile Editor";  
       }
       else{
         nextView = "/editor/";
-        buttonText = "Profile Editor";
+        buttonText = "Goto Profile Editor";
         titleTxt = "Profile Viewer";
       }
       return (

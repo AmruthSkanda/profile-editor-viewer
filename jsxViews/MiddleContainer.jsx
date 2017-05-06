@@ -70,39 +70,29 @@ const TitleView = (props) =>{
 	)
 }
 
-const EducationReadOnly = (props) => {
-		let val = ' ';
-		for(var prop in props.formData){
-			val += props.formData[prop];
-			val += " :: ";
-		}
+const ReadOnlyView = (props) => {
+	let prop = props.id.toString();
+	return(			
+		<div className="fieldContainer"> 
+			<div className="fieldTitles">{prop.replace('_',' ').slice(0,prop.length-1).replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();})}:&nbsp;&nbsp;&nbsp;</div>
+         	<div className="fieldValues">{props.value}</div>
+		</div> 
+	);
+		
+}
+/*const ExpirienceReadOnly = (props) => {
+	for(var i=0;i < Object.keys(props.formData).length;i++){
 		return(
 			<div> 
 				<div className="fieldContainer"> 
-					<div className="fieldTitles">Education Details:&nbsp;&nbsp;&nbsp;</div>
-		         	<div className="fieldValues">{ val.slice(0,-4) }</div>
+					<div className="fieldTitles">{prop}:&nbsp;&nbsp;&nbsp;</div>
+		         	<div className="fieldValues">{props.formData[prop]}</div>
 				</div> 
-				
 			</div> 
-		);
-}
-const ExpirienceReadOnly = (props) => {
-	let val = ' ';
-	for(var prop in props.formData){
-		val += props.formData[prop];
-		val += " :: ";
+		);	
 	}
-	return(
-		<div> 
-			<div className="fieldContainer"> 
-				<div className="fieldTitles">Company:&nbsp;&nbsp;&nbsp;</div>
-	         	<div className="fieldValues">
-	         		{ val.slice(0,-4) }
-	         	</div>
-			</div> 
-		</div> 
-	);
-}
+	
+}*/
 export default class MiddleContainer extends React.Component{
 	constructor(props){
 		super(props)
@@ -147,6 +137,7 @@ export default class MiddleContainer extends React.Component{
 
 	render(){
 		that = this;
+		let readOnly = [];
 		var formDataAll = this.props.profileData ? this.props.profileData : store.getUserProfileData();
 		var educationView =[],expirienceView=[];
 		for(var i=1;i<=this.state.educationCount;i++)
@@ -160,23 +151,33 @@ export default class MiddleContainer extends React.Component{
 				if(prop.toString().indexOf(i) != -1)
 					formData[prop] = formDataAll["page4"][prop];
 			}
+			for(let prop in formData){
+				readOnly.push(
+					<ReadOnlyView key={i} id={prop} value={formData[prop]}/>
+				);
+			}
 			expirienceReadOnlyView.push(
 				<div>
-					<div className="dummyTitle">{"Company "+ i + " details:   (Company :: Expirience)"}</div>
-					<ExpirienceReadOnly key={i} formData={formData}/>
+					<div className="dummyTitle">{"Company "+ i + " details:"}</div>
+					{readOnly}
 				</div>
 			);
 		}
 		for(var i=1;i<=this.state.educationCount;i++){
-			let formData = {};
+			let formData = {},readOnly=[];
 			for(let prop in formDataAll["page3"]){
 				if(prop.toString().indexOf(i) != -1)
 					formData[prop] = formDataAll["page3"][prop];
 			}
+			for(let prop in formData){
+				readOnly.push(
+					<ReadOnlyView key={prop} id={prop} value={formData[prop]}/>
+				);
+			}
 			eduReadOnlyView.push(
 				<div>
-					<div className="dummyTitle">{"Education "+ i + " details:   (Exam :: Education Board :: Percentage in %)"}</div>
-					<EducationReadOnly key={i} formData={formData}/>
+					<div className="dummyTitle">{"Education "+ i + " details:"}</div>
+					{readOnly}
 				</div>
 			);
 		}
