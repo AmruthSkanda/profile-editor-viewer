@@ -144,16 +144,17 @@ export default class MiddleContainer extends React.Component{
 			educationView.push(<EducationFields key={i} index={i}/>)
 		for(var i=1;i<=this.state.expirienceCount;i++)
 			expirienceView.push(<ExpirienceFields key={i} index={i}/>)
+		
 		var expirienceReadOnlyView = [],eduReadOnlyView=[];
 		for(var i=1;i<=this.state.expirienceCount;i++){
-			let formData = {};
+			let formData = {},readOnly=[];;
 			for(let prop in formDataAll["page4"]){
 				if(prop.toString().indexOf(i) != -1)
 					formData[prop] = formDataAll["page4"][prop];
 			}
 			for(let prop in formData){
 				readOnly.push(
-					<ReadOnlyView key={i} id={prop} value={formData[prop]}/>
+					<ReadOnlyView key={prop} id={prop} value={formData[prop]}/>
 				);
 			}
 			expirienceReadOnlyView.push(
@@ -163,6 +164,7 @@ export default class MiddleContainer extends React.Component{
 				</div>
 			);
 		}
+		
 		for(var i=1;i<=this.state.educationCount;i++){
 			let formData = {},readOnly=[];
 			for(let prop in formDataAll["page3"]){
@@ -181,6 +183,19 @@ export default class MiddleContainer extends React.Component{
 				</div>
 			);
 		}
+		var readOnlyPage1 = [],readOnlyPage2 = [],tempValues1=[],tempValues2=[];
+		for(let prop in formDataAll["page1"]){
+			tempValues1.push(formDataAll["page1"][prop]);
+			readOnlyPage1.push(
+				<ReadOnlyView key={prop} id={prop+' '} value={formDataAll["page1"][prop]} />
+			);
+		}
+		for(let prop in formDataAll["page2"]){
+			tempValues2.push(formDataAll["page2"][prop]);
+			readOnlyPage2.push(
+				<ReadOnlyView key={prop} id={prop+' '} value={formDataAll["page2"][prop]} />
+			);
+		}
 		switch (this.state.pageIndex){ 	
 			default:
 			case 1:{
@@ -189,28 +204,8 @@ export default class MiddleContainer extends React.Component{
 						return(
 							<div id="formBody">
 								<TitleView onEditClick={this.onEditClick} index={this.state.pageIndex}/>
-								
 				         		<div className="fieldDiv">
-				         			<div className="fieldContainer">
-							         	<div className="fieldTitles">First Name:&nbsp;&nbsp;&nbsp;</div>
-							         	<div className="fieldValues">{formData.FIRST_NAME ? formData.FIRST_NAME : ''}</div>
-						         	</div>
-						         	<div className="fieldContainer">
-							         	<div className="fieldTitles">Second Name:&nbsp;&nbsp;&nbsp;</div>
-							         	<div className="fieldValues">{formData.SECOND_NAME ? formData.SECOND_NAME : ''}</div>
-						         	</div>
-						         	<div className="fieldContainer">
-							        	<div className="fieldTitles">Father's Name:&nbsp;&nbsp;&nbsp;</div>
-							         	<div className="fieldValues">{formData.FATHER_NAME ? formData.FATHER_NAME : ''}</div>
-						         	</div>
-						         	<div className="fieldContainer">
-							         	<div className="fieldTitles">Mother's Name:&nbsp;&nbsp;&nbsp;</div>
-							         	<div className="fieldValues">{formData.MOTHER_NAME ? formData.MOTHER_NAME : ''}</div>					       
-						         	</div>
-						         	<div className="fieldContainer">
-							         	<div className="fieldTitles">DOB:&nbsp;&nbsp;&nbsp;</div>
-							         	<div className="fieldValues">{formData.DOB ? formData.DOB : ''}</div><br/>
-						         	</div>
+									{readOnlyPage1}
 						        </div>			       
 			         		</div>
 						);
@@ -221,20 +216,20 @@ export default class MiddleContainer extends React.Component{
 							<div className="formTitle">Tell me about yourself</div>
 			         		<div>
 					         	<label>Your Name</label><br/>
-					         	<input id="FIRST_NAME" type="text" placeholder="Enter first name" />
-					         	<input id="SECOND_NAME" type="text" style={{"marginLeft": "4em"}} placeholder="Enter second name"/>
+					         	<input id="FIRST_NAME" key="FIRST_NAME" defaultValue={tempValues1[0]} type="text" placeholder="Enter first name" />
+					         	<input id="SECOND_NAME" key="SECOND_NAME" defaultValue={tempValues1[1]} type="text" style={{"marginLeft": "4em"}} placeholder="Enter second name"/>
 					        </div> 
 					        <div>
 					        	<label>Father's Name </label><br/>
-					         	<input id="FATHER_NAME" type="text" placeholder="Enter father name" /><br/>
+					         	<input id="FATHER_NAME" key="FATHER_NAME" defaultValue={tempValues1[2]} type="text" placeholder="Enter father name" /><br/>
 					        </div>
 					        <div>
 					         	<label>Mother's Name </label><br/>
-					         	<input id="MOTHER_NAME" type="text" placeholder="Enter mother name" /><br/>
+					         	<input id="MOTHER_NAME" key="MOTHER_NAME" defaultValue={tempValues1[3]} type="text" placeholder="Enter mother name" /><br/>
 					        </div>
 					        <div>
 					         	<label>DOB</label> <br/>
-					         	<input id="DOB" type="date" placeholder="Enter date of birth" /><br/>
+					         	<input id="DOB" key="DOB" defaultValue={tempValues1[4]} type="date" placeholder="Enter date of birth" /><br/>
 					        </div>
 					        <SubmitFields backButton={false} clear={this.props.clear}/>	        
 					       
@@ -249,26 +244,7 @@ export default class MiddleContainer extends React.Component{
 							<div id="formBody">
 								<TitleView onEditClick={this.onEditClick} index={this.state.pageIndex}/>
 				         		<div className="fieldDiv">
-				         			<div className="fieldContainer">
-						         		<div className="fieldTitles">Street1:&nbsp;&nbsp;&nbsp;</div>
-						         		<div className="fieldValues">{formData.STREET1 ? formData.STREET1 : ''}</div>
-						         	</div>
-						         	<div className="fieldContainer">
-						         		<div className="fieldTitles">Street2:&nbsp;&nbsp;&nbsp;</div>
-						         		<div className="fieldValues">{formData.STREET2 ? formData.STREET2 : ''}</div>
-						        	</div>
-						        	<div className="fieldContainer">
-						        		<div className="fieldTitles">City:&nbsp;&nbsp;&nbsp;</div>
-						         		<div className="fieldValues">{formData.CITY ? formData.CITY : ''}</div><br/>
-						         	</div>
-						         	<div className="fieldContainer">
-						         		<div className="fieldTitles">State:&nbsp;&nbsp;&nbsp;</div>
-						         		<div className="fieldValues">{formData.STATE ? formData.STATE : ''}</div><br/>						       
-						         	</div>
-						         	<div className="fieldContainer">
-						         		<div className="fieldTitles">Pincode:&nbsp;&nbsp;&nbsp;</div>
-						         		<div className="fieldValues">{formData.PINCODE ? formData.PINCODE : ''}</div><br/>
-						        	</div>
+				         			{readOnlyPage2}
 						        </div>			       
 			         		</div>
 						);
@@ -279,20 +255,20 @@ export default class MiddleContainer extends React.Component{
 							<div className="formTitle">Where do you live?</div>
 			         		<div>
 					         	<label>Your Address</label><br/>
-					         	<input id="STREET1" type="text" placeholder="Enter Street1" />
-					         	<input id="STREET2" type="text" style={{"marginLeft": "4em"}} placeholder="Enter Street2"/>
+					         	<input id="STREET1" key="STREET1"  defaultValue={tempValues2[0]} type="text" placeholder="Enter Street1" />
+					         	<input id="STREET2" key="STREET2" defaultValue={tempValues2[1]} type="text" style={{"marginLeft": "4em"}} placeholder="Enter Street2"/>
 					        </div> 				       
 					        <div>			
 					        	<label>City </label><br/>	         	
-					         	<input id="CITY" type="text" placeholder="Enter City" /><br/>
+					         	<input id="CITY" key="CITY" defaultValue={tempValues2[2]} type="text" placeholder="Enter City" /><br/>
 					        </div>
 					        <div>
 					        	<label>State </label><br/>				         	
-					         	<input id="STATE" type="text" placeholder="Enter State" /><br/>
+					         	<input id="STATE" key="STATE"  defaultValue={tempValues2[3]} type="text" placeholder="Enter State" /><br/>
 					        </div>
 					        <div>			
 					        	<label>Pincode </label><br/>	         	
-					         	<input id="PINCODE" type="text" placeholder="Enter Zip" /><br/>
+					         	<input id="PINCODE" key="PINCODE"  defaultValue={tempValues2[4]} type="text" placeholder="Enter Zip" /><br/>
 					        </div>
 					        <SubmitFields backButton={true} prevPageIndex={1} changePage={this.props.changePage}  clear={this.props.clear}/>	        
 					        
