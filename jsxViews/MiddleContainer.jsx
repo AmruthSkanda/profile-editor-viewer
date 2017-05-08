@@ -13,15 +13,16 @@ const EducationFields = (props) => {
 					<option value="">Select an Exam</option>
 					<option value="Exam1">Exam 1</option>
 					<option value="Exam2">Exam 2</option>
+					<option value="Exam3">Exam 3</option>
 				</select> 
 			</div> 
 			<div> 
 				<label>Board of education </label><br/> 
-				<input id={"EDUCATION_BOARD"+props.index} type="text" name="EXAM_TYPE" placeholder="Enter education board" /><br/> 
+				<input id={"EDUCATION_BOARD"+props.index} defaultValue={props.formData[1]} type="text" name="EXAM_TYPE" placeholder="Enter education board" /><br/> 
 			</div> 
 			<div> 
 				<label>Percentage % </label><br/> 
-				<input id={"PERCENTAGE"+props.index} type="number" min="0" max="100" placeholder="Enter %" /><br/> 
+				<input id={"PERCENTAGE"+props.index} defaultValue={props.formData[2]} type="number" min="0" max="100" placeholder="Enter %" /><br/> 
 			</div> 
 		</div> 
 	);
@@ -33,11 +34,11 @@ const ExpirienceFields = (props) => {
 		<div> 
 			<div> 
 	 			<label>Company </label><br/> 
-	 			<input id={"COMPANY"+props.index} type="text" placeholder="Enter name of employer"/> 
+	 			<input id={"COMPANY"+props.index} defaultValue={props.formData[0]} type="text" placeholder="Enter name of employer"/> 
 	 		</div> 
 	 		<div> 
 	 			<label>No. of years </label><br/> 
-	 			<input id={"NO_OF_YEARS"+props.index} type="number" max="100" min="0" placeholder="Enter no of years"/><br/> 
+	 			<input id={"NO_OF_YEARS"+props.index} defaultValue={props.formData[1]} type="number" max="100" min="0" placeholder="Enter no of years"/><br/> 
 	 		</div> 
 	 		
  		</div> 
@@ -135,16 +136,38 @@ export default class MiddleContainer extends React.Component{
 	    //this.setState({view:nextView})
 	  }
 
+	
 	render(){
 		that = this;
-		let readOnly = [];
+		let readOnly = [],reqFields = [];
 		var formDataAll = this.props.profileData ? this.props.profileData : store.getUserProfileData();
+		let page3Keys = Object.keys(formDataAll["page3"]);
+		let page4Keys = Object.keys(formDataAll["page4"]);
 		var educationView =[],expirienceView=[];
-		for(var i=1;i<=this.state.educationCount;i++)
-			educationView.push(<EducationFields key={i} index={i}/>)
-		for(var i=1;i<=this.state.expirienceCount;i++)
-			expirienceView.push(<ExpirienceFields key={i} index={i}/>)
-		
+
+		for(var i=1;i<=this.state.educationCount;i++){
+			let reqVals = page3Keys.map((key)=>{
+				if(key.match(i)) return formDataAll["page3"][key];
+			});
+			reqVals = reqVals.filter((val)=> {return val});
+			/*let reqVals = reqFields.map((prop)=>{
+				return formDataAll["page3"][prop];
+			});*/
+			educationView.push(<EducationFields key={i} index={i} formData={reqVals}/>)
+		}
+
+		reqFields=[];
+		for(var i=1;i<=this.state.expirienceCount;i++){
+			let reqVals = page4Keys.map((key)=>{
+				if(key.match(i)) return formDataAll["page4"][key];
+			});
+			reqVals = reqVals.filter((val)=> {return val});
+			/*let reqVals = reqFields.map((prop)=>{
+				return formDataAll["page4"][prop];
+			});*/
+			expirienceView.push(<ExpirienceFields key={i} index={i} formData={reqVals}/>)
+		}
+
 		var expirienceReadOnlyView = [],eduReadOnlyView=[];
 		for(var i=1;i<=this.state.expirienceCount;i++){
 			let formData = {},readOnly=[];;
